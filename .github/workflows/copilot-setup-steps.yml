@@ -1,0 +1,40 @@
+name: "Copilot Setup Steps"
+
+# Runs automatically when this file changes, so you can check it works,
+# and can be started manually from the Actions tab.
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - .github/workflows/copilot-setup-steps.yml
+  pull_request:
+    paths:
+      - .github/workflows/copilot-setup-steps.yml
+
+jobs:
+  # The job MUST be named `copilot-setup-steps` or Copilot ignores it.
+  copilot-setup-steps:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Show versions
+        run: flutter --version
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      # Only keep this step if generated files (slang, drift, go_router_builder,
+      # json_serializable) are NOT committed to the repo. Tests that import
+      # them won't compile without it.
+      - name: Generate code
+        run: dart run build_runner build --delete-conflicting-outputs
