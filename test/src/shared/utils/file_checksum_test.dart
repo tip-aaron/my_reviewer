@@ -28,15 +28,17 @@ void main() {
       expect(await verifyFileSha256(tempFile, _abcSha256), isTrue);
     });
 
-    test('matches digest case-insensitively and ignores surrounding whitespace',
-        () async {
-      await tempFile.writeAsString('abc');
+    test(
+      'matches digest case-insensitively and ignores surrounding whitespace',
+      () async {
+        await tempFile.writeAsString('abc');
 
-      expect(
-        await verifyFileSha256(tempFile, '  ${_abcSha256.toUpperCase()} \n'),
-        isTrue,
-      );
-    });
+        expect(
+          await verifyFileSha256(tempFile, '  ${_abcSha256.toUpperCase()} \n'),
+          isTrue,
+        );
+      },
+    );
 
     test('returns false when the digest does not match', () async {
       await tempFile.writeAsString('abc');
@@ -50,17 +52,21 @@ void main() {
       expect(await verifyFileSha256(tempFile, _emptyFileSha256), isTrue);
     });
 
-    test('returns true without reading the file when the digest is blank',
-        () async {
-      expect(await verifyFileSha256(tempFile, ' \t\n '), isTrue);
-    });
+    test(
+      'returns true without reading the file when the digest is blank',
+      () async {
+        expect(await verifyFileSha256(tempFile, ' \t\n '), isTrue);
+      },
+    );
 
-    test('propagates a file system error when the file cannot be read',
-        () async {
-      await expectLater(
-        verifyFileSha256(tempFile, _abcSha256),
-        throwsA(isA<FileSystemException>()),
-      );
-    });
+    test(
+      'propagates a file system error when the file cannot be read',
+      () async {
+        await expectLater(
+          verifyFileSha256(tempFile, _abcSha256),
+          throwsA(isA<FileSystemException>()),
+        );
+      },
+    );
   });
 }

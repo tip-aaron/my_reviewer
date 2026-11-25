@@ -65,8 +65,7 @@ void main() {
       expect(layout.poses[2].offset, Offset.zero);
     });
 
-    test('caps visible poses when count exceeds the visible-card limit',
-        () {
+    test('caps visible poses when count exceeds the visible-card limit', () {
       final layout = computeStackLayout(
         available: const Size(200, 200),
         count: 1000000,
